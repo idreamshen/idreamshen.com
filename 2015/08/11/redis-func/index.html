@@ -36,18 +36,27 @@
 
 
 <meta name="description" content="redis-cli连接数据库例子：redis-cli 连接到本地例子：redis-cli -h 192.168.1.27 连接到远程
-type查看某个 key 的类型例子：type key，返回的结果可能有 string，set，list 等">
+type查看某个 key 的类型例子：type key，返回的结果可能有 string，set，list 等
+keys查看所有的 key例子：keys *
+smembers查看某个 sets 类型的所有成员例子：smembers key
+hgetall查看某个 ha">
 <meta property="og:type" content="article">
 <meta property="og:title" content="redis 几个常用的简单命令">
 <meta property="og:url" content="http://idreamshen.com/2015/08/11/redis-func/index.html">
 <meta property="og:site_name" content="idreamshen">
 <meta property="og:description" content="redis-cli连接数据库例子：redis-cli 连接到本地例子：redis-cli -h 192.168.1.27 连接到远程
-type查看某个 key 的类型例子：type key，返回的结果可能有 string，set，list 等">
-<meta property="og:updated_time" content="2015-08-11T07:38:17.000Z">
+type查看某个 key 的类型例子：type key，返回的结果可能有 string，set，list 等
+keys查看所有的 key例子：keys *
+smembers查看某个 sets 类型的所有成员例子：smembers key
+hgetall查看某个 ha">
+<meta property="og:updated_time" content="2015-08-11T07:46:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="redis 几个常用的简单命令">
 <meta name="twitter:description" content="redis-cli连接数据库例子：redis-cli 连接到本地例子：redis-cli -h 192.168.1.27 连接到远程
-type查看某个 key 的类型例子：type key，返回的结果可能有 string，set，list 等">
+type查看某个 key 的类型例子：type key，返回的结果可能有 string，set，list 等
+keys查看所有的 key例子：keys *
+smembers查看某个 sets 类型的所有成员例子：smembers key
+hgetall查看某个 ha">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -186,6 +195,9 @@ type查看某个 key 的类型例子：type key，返回的结果可能有 strin
       
         <span itemprop="articleBody"><h3 id="redis-cli">redis-cli</h3><p>连接数据库<br>例子：<code>redis-cli</code> 连接到本地<br>例子：<code>redis-cli -h 192.168.1.27</code> 连接到远程</p>
 <h3 id="type">type</h3><p>查看某个 key 的类型<br>例子：<code>type key</code>，返回的结果可能有 <code>string</code>，<code>set</code>，<code>list</code> 等</p>
+<h3 id="keys">keys</h3><p>查看所有的 key<br>例子：<code>keys *</code></p>
+<h3 id="smembers">smembers</h3><p>查看某个 sets 类型的所有成员<br>例子：<code>smembers key</code></p>
+<h3 id="hgetall">hgetall</h3><p>查看某个 hash 类型的所有成员<br>例子：<code>hgetall key</code></p>
 </span>
       
     </div>
@@ -311,7 +323,7 @@ type查看某个 key 的类型例子：type key，返回的结果可能有 strin
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#redis-cli"><span class="nav-number">1.</span> <span class="nav-text">redis-cli</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#type"><span class="nav-number">2.</span> <span class="nav-text">type</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#redis-cli"><span class="nav-number">1.</span> <span class="nav-text">redis-cli</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#type"><span class="nav-number">2.</span> <span class="nav-text">type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keys"><span class="nav-number">3.</span> <span class="nav-text">keys</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#smembers"><span class="nav-number">4.</span> <span class="nav-text">smembers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hgetall"><span class="nav-number">5.</span> <span class="nav-text">hgetall</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
