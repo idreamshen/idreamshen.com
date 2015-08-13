@@ -26,7 +26,7 @@
 
 
 
-  <meta name="keywords" content="redis," />
+  <meta name="keywords" content="sequelize," />
 
 
 
@@ -35,28 +35,19 @@
   <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
 
 
-<meta name="description" content="redis-cli连接数据库例子：redis-cli 连接到本地例子：redis-cli -h 192.168.1.27 连接到远程
-type查看某个 key 的类型例子：type key，返回的结果可能有 string，set，list 等
-keys查看所有的 key例子：keys *
-smembers查看某个 sets 类型的所有成员例子：smembers key
-hgetall查看某个 ha">
+<meta name="description" content="sequelize 的事务模式详细使用方法可以参考官方文档http://docs.sequelizejs.com/en/latest/docs/transactions
+本文主要介绍一下如何在 sequelize 的事务中进行循环插入。假设有两个模型 Order 和 OrderItem，一条 Order 记录会对应若干条 OrderItem 记录12345678910111213141516171">
 <meta property="og:type" content="article">
-<meta property="og:title" content="redis 几个常用的简单命令">
-<meta property="og:url" content="http://idreamshen.com/2015/08/11/redis-func/index.html">
+<meta property="og:title" content="sequelize 中的事务循环插入">
+<meta property="og:url" content="http://idreamshen.com/2015/08/13/sequelize-transaction/index.html">
 <meta property="og:site_name" content="idreamshen">
-<meta property="og:description" content="redis-cli连接数据库例子：redis-cli 连接到本地例子：redis-cli -h 192.168.1.27 连接到远程
-type查看某个 key 的类型例子：type key，返回的结果可能有 string，set，list 等
-keys查看所有的 key例子：keys *
-smembers查看某个 sets 类型的所有成员例子：smembers key
-hgetall查看某个 ha">
-<meta property="og:updated_time" content="2015-08-11T07:46:19.000Z">
+<meta property="og:description" content="sequelize 的事务模式详细使用方法可以参考官方文档http://docs.sequelizejs.com/en/latest/docs/transactions
+本文主要介绍一下如何在 sequelize 的事务中进行循环插入。假设有两个模型 Order 和 OrderItem，一条 Order 记录会对应若干条 OrderItem 记录12345678910111213141516171">
+<meta property="og:updated_time" content="2015-08-13T08:27:53.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="redis 几个常用的简单命令">
-<meta name="twitter:description" content="redis-cli连接数据库例子：redis-cli 连接到本地例子：redis-cli -h 192.168.1.27 连接到远程
-type查看某个 key 的类型例子：type key，返回的结果可能有 string，set，list 等
-keys查看所有的 key例子：keys *
-smembers查看某个 sets 类型的所有成员例子：smembers key
-hgetall查看某个 ha">
+<meta name="twitter:title" content="sequelize 中的事务循环插入">
+<meta name="twitter:description" content="sequelize 的事务模式详细使用方法可以参考官方文档http://docs.sequelizejs.com/en/latest/docs/transactions
+本文主要介绍一下如何在 sequelize 的事务中进行循环插入。假设有两个模型 Order 和 OrderItem，一条 Order 记录会对应若干条 OrderItem 记录12345678910111213141516171">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -66,7 +57,7 @@ hgetall查看某个 ha">
   };
 </script>
 
-  <title> redis 几个常用的简单命令 | idreamshen </title>
+  <title> sequelize 中的事务循环插入 | idreamshen </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -175,7 +166,7 @@ hgetall查看某个 ha">
           
           
             
-              redis 几个常用的简单命令
+              sequelize 中的事务循环插入
             
           
         </h1>
@@ -184,8 +175,8 @@ hgetall查看某个 ha">
       <div class="post-meta">
         <span class="post-time">
           发表于
-          <time itemprop="dateCreated" datetime="2015-08-11T15:27:19+08:00" content="2015-08-11">
-            2015-08-11
+          <time itemprop="dateCreated" datetime="2015-08-13T16:14:13+08:00" content="2015-08-13">
+            2015-08-13
           </time>
         </span>
 
@@ -195,8 +186,8 @@ hgetall查看某个 ha">
           
             <span class="post-comments-count">
               &nbsp; | &nbsp;
-              <a href="/2015/08/11/redis-func/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/11/redis-func/" itemprop="commentsCount"></span>
+              <a href="/2015/08/13/sequelize-transaction/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/13/sequelize-transaction/" itemprop="commentsCount"></span>
               </a>
             </span>
           
@@ -210,11 +201,9 @@ hgetall查看某个 ha">
       
 
       
-        <span itemprop="articleBody"><h3 id="redis-cli">redis-cli</h3><p>连接数据库<br>例子：<code>redis-cli</code> 连接到本地<br>例子：<code>redis-cli -h 192.168.1.27</code> 连接到远程</p>
-<h3 id="type">type</h3><p>查看某个 key 的类型<br>例子：<code>type key</code>，返回的结果可能有 <code>string</code>，<code>set</code>，<code>list</code> 等</p>
-<h3 id="keys">keys</h3><p>查看所有的 key<br>例子：<code>keys *</code></p>
-<h3 id="smembers">smembers</h3><p>查看某个 sets 类型的所有成员<br>例子：<code>smembers key</code></p>
-<h3 id="hgetall">hgetall</h3><p>查看某个 hash 类型的所有成员<br>例子：<code>hgetall key</code></p>
+        <span itemprop="articleBody"><p>sequelize 的事务模式详细使用方法可以参考官方文档<br><a href="http://docs.sequelizejs.com/en/latest/docs/transactions" target="_blank" rel="external">http://docs.sequelizejs.com/en/latest/docs/transactions</a></p>
+<p>本文主要介绍一下如何在 sequelize 的事务中进行循环插入。<br>假设有两个模型 Order 和 OrderItem，一条 Order 记录会对应若干条 OrderItem 记录<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Promsise = <span class="built_in">require</span>(<span class="string">'bluebird'</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">insert</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> itemIds = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> sequelize.transaction(<span class="function"><span class="keyword">function</span> (<span class="params">t</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Order.create(&#123;</span><br><span class="line">      name: <span class="string">'XXX订单'</span>,</span><br><span class="line">      price: <span class="number">100</span></span><br><span class="line">    &#125;, &#123;transaction: t&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">order</span>)</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Promise</span>.map(itemIds, <span class="function"><span class="keyword">function</span>(<span class="params">itemId</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> OrderItem.create(&#123;</span><br><span class="line">          order_id: order.get(<span class="string">'id'</span>),</span><br><span class="line">          item_id: itemId</span><br><span class="line">        &#125;, &#123;transaction: t&#125;);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>解决的方案就是采用 Promise.map 这个方法，它能遍历数组并返回 promise。</p>
 </span>
       
     </div>
@@ -223,7 +212,7 @@ hgetall查看某个 ha">
       
         <div class="post-tags">
           
-            <a href="/tags/redis/" rel="tag">#redis</a>
+            <a href="/tags/sequelize/" rel="tag">#sequelize</a>
           
         </div>
       
@@ -232,13 +221,11 @@ hgetall查看某个 ha">
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/08/11/socket-io-some-useful-funcs/" rel="prev">socket.io 中一些有用的方法</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/08/11/hello-world/" rel="next">Hello Hexo</a>
+              <a href="/2015/08/11/socket-io-some-useful-funcs/" rel="next">socket.io 中一些有用的方法</a>
             
           </div>
         </div>
@@ -263,8 +250,8 @@ hgetall查看某个 ha">
         
           <div class="comments" id="comments">
             
-              <div class="ds-thread" data-thread-key="2015/08/11/redis-func/"
-                   data-title="redis 几个常用的简单命令" data-url="http://idreamshen.com/2015/08/11/redis-func/">
+              <div class="ds-thread" data-thread-key="2015/08/13/sequelize-transaction/"
+                   data-title="sequelize 中的事务循环插入" data-url="http://idreamshen.com/2015/08/13/sequelize-transaction/">
               </div>
             
           </div>
@@ -346,7 +333,7 @@ hgetall查看某个 ha">
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#redis-cli"><span class="nav-number">1.</span> <span class="nav-text">redis-cli</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#type"><span class="nav-number">2.</span> <span class="nav-text">type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keys"><span class="nav-number">3.</span> <span class="nav-text">keys</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#smembers"><span class="nav-number">4.</span> <span class="nav-text">smembers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hgetall"><span class="nav-number">5.</span> <span class="nav-text">hgetall</span></a></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
