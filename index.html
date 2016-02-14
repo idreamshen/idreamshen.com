@@ -164,6 +164,88 @@
           
           
             
+              <a class="post-title-link" href="/2016/02/13/2015-review/" itemprop="url">
+                2015年终小结
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2016-02-13T12:12:49+08:00" content="2016-02-13">
+            2016-02-13
+          </time>
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2016/02/13/2015-review/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/13/2015-review/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody"><p>2015年是毕业后的第一年,工作经验终于增加了一年.这一年的努力如果要打个分的话,我给自己七分.这一年最大的变化是我能熟练的使用 Nodejs 开发各种项目以及开始学习了 Java.那接下来我就谈谈这一年里我对这两门语言的感受吧.</p>
+<p>Nodejs 是我这一年里使用次数最多的语言,我用它完成了若干个的项目.总结下来,用 Nodejs 开发有两个优点,开发快和性能高.我先说说开发快,由于 Nodejs 使用了 Javascript 这门语言作为编程语言, Javascript 的动态特性使得其在编写代码时非常简单.第二个优点是性能高,由于 Javascript 支持回调函数,使得异步IO并行操作,节省了大量的等待时间.但是 Nodejs 开发大型合作项目就有点麻烦了.一, IDE 无法很好地做到代码提示,二, 变量名方法名等重构困难.三, 弱类型很容易埋下了隐藏的漏洞.</p>
+<p>我举2个实例来看一下 Nodejs 和 Java 在编程上有什么区别.</p>
+<p>1.假设需求:通过一个网页向用户展示某件商品的相关信息.</p>
+<p>Nodejs 版 (Express Framework)<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> app = express();</span><br><span class="line"><span class="keyword">var</span> <span class="built_in">Promise</span> = <span class="built_in">require</span>(<span class="string">'bluebird'</span>);</span><br><span class="line"><span class="keyword">var</span> model = <span class="built_in">require</span>(<span class="string">'./models/index'</span>);</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">'/item'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> itemId = req.query.itemId;</span><br><span class="line">    <span class="keyword">var</span> myUserId = req.session.userId;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Promise</span>.all([</span><br><span class="line">        model.user.findById(myUserId),</span><br><span class="line">        model.item.findById(itemId),</span><br><span class="line">        model.itemDetail.findByItemId(itemId)</span><br><span class="line">    ]).spread(<span class="function"><span class="keyword">function</span>(<span class="params">user, item, itemDetail</span>) </span>&#123;</span><br><span class="line">        res.render(<span class="string">'item'</span>, &#123;</span><br><span class="line">            me: user,</span><br><span class="line">            item: item,</span><br><span class="line">            itemDetail: itemDetail</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">        res.render(<span class="string">'error'</span>); <span class="comment">// 渲染 error 页面</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>Java 版 (Spring Boot Framework)<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ItemController</span> &#123;</span></span><br><span class="line">    <span class="annotation">@Autowired</span> <span class="keyword">private</span> UserRepository userRepository;</span><br><span class="line">    <span class="annotation">@Autowired</span> <span class="keyword">private</span> ItemRepository itemRepository;</span><br><span class="line">    <span class="annotation">@Autowired</span> <span class="keyword">private</span> ItemDetailRepository itemDetailRepository;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@RequestMapping</span>(method = RequestMethod.GET, path = <span class="string">'/item'</span>)</span><br><span class="line">    <span class="keyword">public</span> String itemRender(<span class="annotation">@RequestParam</span>(value = <span class="string">"itemId"</span>, required = <span class="literal">true</span>) <span class="typename">int</span> itemId,</span><br><span class="line">                            Model model) &#123;</span><br><span class="line"></span><br><span class="line">        Session session;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        <span class="typename">int</span> userId = session.getUserId();</span><br><span class="line"></span><br><span class="line">        UserModel userModel = userRepository.findOne(userId);</span><br><span class="line">        ItemModel itemModel = itemRepository.findOne(itemId);</span><br><span class="line">        ItemDetailModel itemDetailModel = itemDetailRepository.findByItemId(itemId);</span><br><span class="line"></span><br><span class="line">        model.addAttribute(<span class="string">'me'</span>, userModel);</span><br><span class="line">        model.addAttribute(<span class="string">'item'</span>, itemModel);</span><br><span class="line">        model.addAttribute(<span class="string">'itemDetail'</span>, itemDetail);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"shop/item"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Nodejs 版中第 11 行至 13 行是从数据库获取信息,通过 Promise 的 all 方法包裹后,三个 sql 语句并行执行,假设 3 条 sql 语句耗时分别为 1ms 1.2ms 0.8ms,那么第 14 行的代码将在 1.2ms 后执行.再看 Java 版,第 15 行至 17 行是串行查询,所以第 19 行会在 1 + 1.2 + 0.8 = 3ms 后执行.这也就是一定程度上, Nodejs 的速度要优于 Java.</p>
+<p>2.假设需求:实现一个机器人简单逻辑</p>
+<p>Nodejs 版<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Bot</span><span class="params">(id)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.id = id;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 说话</span></span><br><span class="line">Bot.prototype.talk = <span class="function"><span class="keyword">function</span><span class="params">(message)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 走路</span></span><br><span class="line">Bot.prototype.walk = <span class="function"><span class="keyword">function</span><span class="params">(direction, step)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Java 版<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Bot</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Bot</span>(<span class="params"><span class="keyword">int</span> id</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">talk</span>(<span class="params">String message</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">walk</span>(<span class="params">Direction direction, <span class="keyword">int</span> step</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从代码结构来看几乎是差不多的,但是当你运行上百个上千个机器人时,就有点区别了.假设生成了1000个机器人. Nodejs 中每个机器人的不同的属性就是 id,其他方法都是相同的引用,也就是会创建1000 份 Bot 对象和 1 份 Bot 原型链上的方法.而在 Java 中会创建 1000 个 Bot Class.两者的内存占用相差是不小的.这是我的个人理解,可能有错误.</p>
+<p>以上两个例子似乎都在夸 Nodejs ,但是在实际使用中, Nodejs 并不是如此好驾驭的,上面我也提到了一些缺点. Nodejs 个人觉得适合小型项目比较好,比如说智能家居上面.对的,今天我花了五百大洋买了个树莓派,希望能把 Nodejs 折腾上去,那么用事件的模式去处理日常生活的各种指令应该是不错的体验(等待快递中 0.0).</p>
+<p>展望一下新的一年吧.由于工作上的需要,我可能得把更多的心思花到 Java 上了.为了不落下 Nodejs 的学习,我将尽可能的用 Nodejs 去编写树莓派上的各种应用.同时还要补一下编程的基础知识,编程的设计模式啦之类的.</p>
+<p>暂时就写到这吧.</p>
+</span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
               <a class="post-title-link" href="/2015/08/13/sequelize-transaction/" itemprop="url">
                 sequelize 中的事务循环插入
               </a>
@@ -474,7 +556,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
