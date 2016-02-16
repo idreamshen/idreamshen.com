@@ -26,7 +26,7 @@
 
 
 
-  <meta name="keywords" content="sequelize," />
+  <meta name="keywords" content="Hexo,next" />
 
 
 
@@ -35,19 +35,22 @@
   <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
 
 
-<meta name="description" content="sequelize 的事务模式详细使用方法可以参考官方文档http://docs.sequelizejs.com/en/latest/docs/transactions
-本文主要介绍一下如何在 sequelize 的事务中进行循环插入。假设有两个模型 Order 和 OrderItem，一条 Order 记录会对应若干条 OrderItem 记录12345678910111213141516171">
+<meta name="description" content="今天玩 Clicker Heroes 的时候点鼠标点的累死,要是 mac 下也有个按键精灵就好了.在网上搜索一番后,找到了 robotjs 这个库,正和我意!
+于是,三行鼠标左键连点代码就有了.12345var robot = require(&quot;robotjs&quot;);robot.setMouseDelay(80);while (true) robot.mouseClick();
+可以轻轻松松在 Cl">
 <meta property="og:type" content="article">
-<meta property="og:title" content="sequelize 中的事务循环插入">
-<meta property="og:url" content="http://idreamshen.com/2015/08/13/sequelize-transaction/index.html">
+<meta property="og:title" content="nodejs 鼠标点击">
+<meta property="og:url" content="http://idreamshen.com/2016/02/16/nodejs-mouse-click/index.html">
 <meta property="og:site_name" content="idreamshen's blog">
-<meta property="og:description" content="sequelize 的事务模式详细使用方法可以参考官方文档http://docs.sequelizejs.com/en/latest/docs/transactions
-本文主要介绍一下如何在 sequelize 的事务中进行循环插入。假设有两个模型 Order 和 OrderItem，一条 Order 记录会对应若干条 OrderItem 记录12345678910111213141516171">
-<meta property="og:updated_time" content="2015-08-13T08:27:53.000Z">
+<meta property="og:description" content="今天玩 Clicker Heroes 的时候点鼠标点的累死,要是 mac 下也有个按键精灵就好了.在网上搜索一番后,找到了 robotjs 这个库,正和我意!
+于是,三行鼠标左键连点代码就有了.12345var robot = require(&quot;robotjs&quot;);robot.setMouseDelay(80);while (true) robot.mouseClick();
+可以轻轻松松在 Cl">
+<meta property="og:updated_time" content="2016-02-16T12:00:28.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="sequelize 中的事务循环插入">
-<meta name="twitter:description" content="sequelize 的事务模式详细使用方法可以参考官方文档http://docs.sequelizejs.com/en/latest/docs/transactions
-本文主要介绍一下如何在 sequelize 的事务中进行循环插入。假设有两个模型 Order 和 OrderItem，一条 Order 记录会对应若干条 OrderItem 记录12345678910111213141516171">
+<meta name="twitter:title" content="nodejs 鼠标点击">
+<meta name="twitter:description" content="今天玩 Clicker Heroes 的时候点鼠标点的累死,要是 mac 下也有个按键精灵就好了.在网上搜索一番后,找到了 robotjs 这个库,正和我意!
+于是,三行鼠标左键连点代码就有了.12345var robot = require(&quot;robotjs&quot;);robot.setMouseDelay(80);while (true) robot.mouseClick();
+可以轻轻松松在 Cl">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -57,7 +60,7 @@
   };
 </script>
 
-  <title> sequelize 中的事务循环插入 | idreamshen's blog </title>
+  <title> nodejs 鼠标点击 | idreamshen's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -166,7 +169,7 @@
           
           
             
-              sequelize 中的事务循环插入
+              nodejs 鼠标点击
             
           
         </h1>
@@ -175,8 +178,8 @@
       <div class="post-meta">
         <span class="post-time">
           发表于
-          <time itemprop="dateCreated" datetime="2015-08-13T16:14:13+08:00" content="2015-08-13">
-            2015-08-13
+          <time itemprop="dateCreated" datetime="2016-02-16T19:53:47+08:00" content="2016-02-16">
+            2016-02-16
           </time>
         </span>
 
@@ -186,8 +189,8 @@
           
             <span class="post-comments-count">
               &nbsp; | &nbsp;
-              <a href="/2015/08/13/sequelize-transaction/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/13/sequelize-transaction/" itemprop="commentsCount"></span>
+              <a href="/2016/02/16/nodejs-mouse-click/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/16/nodejs-mouse-click/" itemprop="commentsCount"></span>
               </a>
             </span>
           
@@ -201,33 +204,26 @@
       
 
       
-        <span itemprop="articleBody"><p>sequelize 的事务模式详细使用方法可以参考官方文档<br><a href="http://docs.sequelizejs.com/en/latest/docs/transactions" target="_blank" rel="external">http://docs.sequelizejs.com/en/latest/docs/transactions</a></p>
-<p>本文主要介绍一下如何在 sequelize 的事务中进行循环插入。<br>假设有两个模型 Order 和 OrderItem，一条 Order 记录会对应若干条 OrderItem 记录<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Promsise = <span class="built_in">require</span>(<span class="string">'bluebird'</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">insert</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> itemIds = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> sequelize.transaction(<span class="function"><span class="keyword">function</span> (<span class="params">t</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Order.create(&#123;</span><br><span class="line">      name: <span class="string">'XXX订单'</span>,</span><br><span class="line">      price: <span class="number">100</span></span><br><span class="line">    &#125;, &#123;transaction: t&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">order</span>)</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Promise</span>.map(itemIds, <span class="function"><span class="keyword">function</span>(<span class="params">itemId</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> OrderItem.create(&#123;</span><br><span class="line">          order_id: order.get(<span class="string">'id'</span>),</span><br><span class="line">          item_id: itemId</span><br><span class="line">        &#125;, &#123;transaction: t&#125;);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>解决的方案就是采用 Promise.map 这个方法，它能遍历数组并返回 promise。</p>
+        <span itemprop="articleBody"><p>今天玩 Clicker Heroes 的时候点鼠标点的累死,要是 mac 下也有个按键精灵就好了.在网上搜索一番后,找到了 robotjs 这个库,正和我意!</p>
+<p>于是,三行鼠标左键连点代码就有了.<br><figure class="highlight openscad"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var robot = require<span class="params">(<span class="string">"robotjs"</span>)</span>;</span><br><span class="line"></span><br><span class="line">robot.setMouseDelay<span class="params">(<span class="number">80</span>)</span>;</span><br><span class="line"></span><br><span class="line">while <span class="params">(<span class="literal">true</span>)</span> robot.mouseClick<span class="params">()</span>;</span><br></pre></td></tr></table></figure></p>
+<p>可以轻轻松松在 Clicker Heroes 中刷刷刷啦.</p>
+<p>robotjs 的 wiki 可以查阅: <a href="https://github.com/octalmage/robotjs" target="_blank" rel="external">https://github.com/octalmage/robotjs</a></p>
 </span>
       
     </div>
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/sequelize/" rel="tag">#sequelize</a>
-          
-        </div>
-      
 
       
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/02/13/2015-review/" rel="prev">2015年终小结</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/08/11/socket-io-some-useful-funcs/" rel="next">socket.io 中一些有用的方法</a>
+              <a href="/2016/02/13/2015-review/" rel="next">2015年终小结</a>
             
           </div>
         </div>
@@ -252,8 +248,8 @@
         
           <div class="comments" id="comments">
             
-              <div class="ds-thread" data-thread-key="2015/08/13/sequelize-transaction/"
-                   data-title="sequelize 中的事务循环插入" data-url="http://idreamshen.com/2015/08/13/sequelize-transaction/">
+              <div class="ds-thread" data-thread-key="2016/02/16/nodejs-mouse-click/"
+                   data-title="nodejs 鼠标点击" data-url="http://idreamshen.com/2016/02/16/nodejs-mouse-click/">
               </div>
             
           </div>
